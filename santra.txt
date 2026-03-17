@@ -1,0 +1,1142 @@
+####Practical 01
+Aim: Define a simple service like converting Rupees into Dollars and call it from different platform like JAVA and .NET
+
+Software Tools Required:
+•	Code Editor: VS code
+•	API Testing Software Application: Postman
+•	Framework: Express.js
+•	Runtime Environment: Node.js
+•	Programming language: JavaScript, Java, C#
+Downloads Required:
+•	Node.js
+•	JDK (Download JDK latest version or higher version than 11.0)
+•	.NET SDK
+•	Postman
+
+Demonstration:
+1. For dotnet C:\Users\Admin\Downloads\TYCS_WS&CC_SOFTWARE
+Step 1: After Downloading Node.js, JDK and .NET SDK, Set the path in environment variable in user variables for admin > Path > Edit > New and Paste the Path for Node.js, JDK and .NET SDK.
+
+Step 2: Create Folder on Desktop “Practical_1” and in cmd Implement the Service
+->mkdir currency-conversion-service
+->cd currency-conversion-service
+->npm init -y
+->npm install express body-parser
+
+Step 3: Open VS Code -> Open  Folder -> Practical1 -> Server.js
+
+Step 4:  Code
+'''#Server.js
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+const port = 3000;
+app.use(bodyParser.json());
+app.post('/convert',(req,res)=>{
+    const amountInRs = req.body.amount_in_rs;
+    const conversionRate = 0.0145;
+    const amountInUsd = amountInRs * conversionRate;
+    res.json({amount_in_usd : amountInUsd});
+});
+app.listen(port,()=>{
+    console.log(`Currency conversion service running on http://localhost:${port}`);
+});'''
+
+for output command in terminal : -> cd currency-conversion-service
+                                  -> node server.js
+
+Open Postman
+search http://localhost:3000
+-------------------------------------------------------------------------
+##Part B : Java Programming Language
+Step 1: Create folder name: Java_Client and Install the following Extension.(Java,langauge support for java by red hat)
+Open VsCode again using new window and open folder Java_Client in that download the following extension.
+
+Step 2:  Create a New File in Java_Client folder as JavaClient.java
+
+Step 3:  Type the following command:->cd Java_Client
+                                    ->java –version
+
+Step 4:  Code: Java_Client.java
+'''import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse.BodyHandlers;
+
+public class JavaClient {
+    public static void main(String[] args) throws Exception {
+        HttpClient client = HttpClient.newHttpClient();
+        String uri = "http://localhost:3000/convert";
+        String requestBody = "{\"amount_in_rs\":1000}";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .header("Content-Type", "application/json")
+                .POST(BodyPublishers.ofString(requestBody))
+                .build();
+        client.sendAsync(request, BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .thenAccept(System.out::println)
+                .join();
+    }         
+}'''
+
+Step 5:  To run this first run the server.js file and then run the JavaClient file (USE Cmd : node server.js)
+NOTE: If you are getting Java Path related error, use the following command:
+
+$env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
+$env:JAVA_HOME = "C:\Program Files\Java\jdk-17.0.1
+$env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
+java -version
+OR
+in oweshell
+-$env:JAVA_HOME="C:\Proghram Files\Java\jdk-17.0.1"
+-$env:PATH="C:\Program Files\Java\jdk-17.0.1\bin"
+
+Step 6:  To run type the following commands:
+   ->cd Java_client
+   ->javac JavaClient.java
+   ->java JavaClient
+Output will be shown 
+-----------------------------------------------------------------------------------------
+##Part C:.NET Programming Language 
+Step 1:Create Folder name .NET Client and install the following Extensions.
+
+Step 2: Open VsCode again using new window and open folder .NET_Client in that download the following extension.
+  -C#
+  -C# Snippets
+  -C# Dev kit
+  -C# Extensions
+
+Step 3: .Click on View > Terminal and type the following command
+-	dotnet new console
+-	dotnet restore
+-	After entering dotnet new console command the file architecture will generate the .NET Project with the Progarm.cs file 
+
+Step 4:Write the code in Program.cs
+
+Code:
+'''using System;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+class Program
+{
+    static async Task Main()
+    {
+        try
+        {
+            var client = new HttpClient();
+            var apiUrl = "http://localhost:3000/convert";
+            var requestBody = new
+            {
+                amount_in_rs = 1000
+            };
+            var jsonRequestBody = System.Text.Json.JsonSerializer.Serialize(requestBody);
+            var response = await client.PostAsync(apiUrl , new StringContent(jsonRequestBody,Encoding.UTF8,"application/json"));
+            if(response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Response Code :" + response.StatusCode);
+                Console.WriteLine("Response Body:" +await response.Content.ReadAsStringAsync());
+            }
+            else
+            {
+                Console.WriteLine("Error:" + response.StatusCode);
+                Console.WriteLine("Details:" +await response.Content.ReadAsStringAsync());
+            }
+        }
+        catch (HttpRequestException e)
+        {
+        Console.WriteLine("An error occured:" +e.Message);    
+        }}}'''
+
+For output: dotnet run (in terminal)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+####Practical 02
+Aim: Create a simple SOAP service
+
+Software tools Required:
+•	Code Editor: Eclipse IDE
+•	Build Automation Tool: Apache Maven
+•	SOAP Testing Tool: SOAPUI
+•	Framework: Apache CXF
+•	Programming Language: Java
+  
+Step 1: install Eclipse
+Downloads Required:
+•	Apache Maven: Download Apache Maven -Maven
+•	JDK: java Download | Oracle India
+•	Eclipse IDE: Eclipse download
+•	SOAP Testing Tool: Download REST & SOAP Automated
+
+After Downloading JDK and Maven, Set path in Environment variable in user variables > path >Edit >New and Paste the path for JDK and Maven and check the versions for both in command prompt
+
+Demonstration:
+-In path variable add the path of jdk and maven
+-In user variable create a new variable named as JAVA_HOME and add the path of jdk.
+-Version checked in command prompt
+     1)	mvn -v
+     2)	java –version
+
+##Java programming Language
+Project name: Simple SOAPService
+Step 1: Open Eclipse IDE, create a Maven Project, Check -Create a simple project (skip archetype selection) and Click on Next.
+
+Step 2: In new Maven Project window add the following details- Group id: com. example, Artifact Id: SimpleSOAPService and version:0.0.1 -snapshot and click finish
+
+Step 3: After Creating the Maven Project, update the pom.xml to include the necessary dependencies for Apache CXF and JAX-ws.
+
+##Code:
+Pom.xml
+'''< project xmIns="http://maven.apache.org/POM/4.0.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
+<modelVersion>4.0.0</modelVersion>
+ <groupId>com.example</groupId>
+<artifactld>SimpleSOAPService</artifactid>
+<version>0.0.1-SNAPSHOT</version>
+<dependencies>
+      <!-- Apache CXF for JAX-WS -->
+      <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactld>
+            <version> 3.4.5</version>
+</dependency>
+<! -- Apache CXF HTTP Transport -->
+<dependency>
+<groupId>org.apache.cxf</groupld>
+<artifactId> cxf-rt-transports-http</artifactld>
+<version>3.4.5</version>
+</dependency>
+
+<! -- Apache CXF HTTP Jetty Transport (for embedded HTTP
+server) ->
+<dependency>
+<groupId>org.apache.cxf</groupId>
+<artifactId>exf-rt-transports-http-jetty</artifactId>
+< version> 3.4.5</version>
+</dependency>
+
+<!-- Jakarta XML WS (JAX-WS API) -->
+ <dependency>
+      <groupld>jakarta.xml.ws</groupld>
+      <artifactld>jakarta.xml.ws-api</artifactId>
+      <version >2.3.3</version>
+</dependency>
+
+<!-- Java Annotations -->
+<dependency>
+      <groupld-javax.annotation</groupld> 
+      <artifactld>javax.annotation-api</artifactld>
+      <version > 1.3.2</version>
+    <dependency>
+  </dependencies>
+</project>'''
+
+After adding dependencies Save it by CtrI-S
+
+Step 4: Create the Service Interface
+Now, create a simple SOAP service interface to define the operations.
+1. Right-click on src/main/java  New  Package and name it com.example
+2. Right-click on the com.example package  New  Class and name it CalculatorService.java.
+File Name: CalculatorService.java
+##Code:
+'''package com.example; 
+import javax.jws.WebMethod; 
+import javax.jws.WebService:
+@WebService 
+public interface CalculatorService { 
+           @WebMethod 
+           int add(int num1, int num2); 
+          @WebMethod 
+          int subtract(int num1, int num2); 
+} '''
+
+Step 5: Implement the Service 
+Now, create a class that implements the CalculatorService interface. 
+1. Right-click on com.example New  Class and name it 
+CalculatorServiceImpl.java. 
+2. Add the following code to CalculatorServicelmpl.java: 
+
+File Name: CalculatorServiceImpl.java 
+##Code: 
+'''package com.example; 
+import javax.jws.WebServicе;
+@WebService(endpointInterface = "com.example.CalculatorService") 
+public class CalculatorServicelmpl implements CalculatorService {
+     @Override 
+     public int add(int num1, int num2) {
+           return num1 + num2;
+     }
+}'''
+ 
+
+Step 6: Create the SOAP Server 
+Next, create a class to publish the SOAP service. 
+1. Right-click on com.example New  Class and name it SOAPServer.java.
+2. Add the following code to SOAPServer.java: 
+
+File Name: SOAPServer.java 
+##Code: package com.example; 
+'''import javax.xml.ws. Endpoint; 
+public class SOAPServer {
+    public static void main(String[] args) {
+         // Create an instance of the service implementation 
+CalculatorServiceImpl implementor = new 
+CalculatorServiceImpl();
+
+// Publish the service 
+String address = "http://localhost:8080/CalculatorService"; 
+  Endpoint.publish(address, implementor); 
+  System.out.println("SOAP Service started at" + address); 
+      }
+   } '''
+
+##Output:
+mvn clean install: The clean install command is commonly used in Maven to build and install a project. The purpose of running clean is to remove any previously compiled code or artifacts, ensuring that the next build starts fresh without using any old files that might cause conflicts or errors.
+
+-In Goal type clean install and run
+             
+#Run the Application 
+1. Right-click on SOAPServer.java  Run As  Java Application. 
+2. You should see the following output: SOAP Service started at http://localhost:8080/CalculatorService
+
+Step 7: Test the SOAP Service Using SOAPUI 
+1. Open SOAPUI and create a new project: 
+1. Click File  New SOAP Project. 
+2. In the Project Name field, enter CalculatorService. 
+3. In the Initial WSDL field, enter: 
+http://localhost:8080/CalculatorService?wsdl
+
+
+###SOAPUI:
+Remaining steps ^&%
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------\
+####Practical No :03
+Aim: Create a simple REST service
+
+Software Tool required:
+•	Code Editior : VS code
+•	API Testing Software Application : Postman
+•	Framework : Flask (micro web framework)
+After Downloading python ,set the path in environment Variable in User Variable > Path > Edit > New and paste the path for python
+New version is 3.13 ,Here the version is 3.12 so following the same for new version.
+
+Till Python 312: Copy Directory path
+Start >python 3.13.1(64 bit) > Open File Location >python3.13.1(6n bit)
+Till python312\Scripts: Copy Directory path
+Start >python 3.13.1(64 bit) > Open File Location >python3.13.1(6n bit) >Open File Location >scripts
+
+Demonstration:
+##Python Programming Language
+Step1 : Install Flask: make sure you have python installed on your system
+
+Open command 
+Step2 : Create a folder name REST_Service,open with vs code and create python file.
+Check and Install Extensions for python
+#Extensions:
+-Python
+-Python Debugger
+
+##Code:
+Python.py
+'''from flask import Flask, jsonify, request
+
+app = Flask(__name__)
+
+# sample data
+data = [
+    {'id': 1, 'name': 'Item 1'},
+    {'id': 2, 'name': 'Item 2'}
+]
+
+# Endpoint to get all items
+@app.route('/items', methods=['GET'])
+def get_items():
+    return jsonify({'items': data})
+
+# Endpoint to get a specific item by ID
+@app.route('/items/<int:item_id>', methods=['GET'])
+def get_item(item_id):
+    item = next((item for item in data if item['id'] == item_id), None)
+    if item:
+        return jsonify({'item': item})
+    else:
+        return jsonify({'message': 'Item not found'}), 404
+
+@app.route('/items', methods=['POST'])
+def add_item():
+    new_item = {'id': len(data) + 1, 'name': request.json['name']}
+    data.append(new_item)
+    return jsonify({'message': 'Item added successfully', 'item': new_item}), 201
+
+# Run the application
+if __name__ == '__main__':
+    app.run(debug=True)    '''
+
+
+For output run "python app.py" in terminal
+
+Open Postman
+#GET
+-Open Postman > JSON > select “GET” and copy paste the url http://127.0.0.1:5000/items and in body select raw send the request .
+
+#POST
+-Select the “POST” and copy paste the url http://127.0.0.1:5000/items and in body select raw and type 
+{
+    "id":3,
+    "name": "Item 3"
+} 
+And send the request .
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+####Practical No.04
+
+Aim: Develop application to consume Google’s search / Google’s Map RESTful Web Service.
+
+Step 1: Download the JDK version 11.0 or Higher.
+
+Step 2: Create a new user variable.
+Environment Variables -> New User variable. Provide the variable name as “JAVA_HOME” and variable value is “C:\Program Files\java\jdk-17
+
+Step 3: Go to terminal check the java version using following command.
+-> Java –version
+
+Step 4: Download Apache tomcat 9.0.98.
+
+Step 5: Create a new folder named as “GoogleMaps” in desktop. Extract the downloaded Apache tomcat zipped file in GoogleMaps folder.
+
+Step 6: There are two ways to keep running Tomcat apache server in the background.
+Method 1: Open the apache folder till bin folder. Go to the “startup” batch file and double click on it. Now, you can see Tomcat Apache server is running.
+Method 2: We can also by clicking the directory path and type CMD.  In terminal type the command “ startup.bat” and hit enter.
+Note: Tomcat server should keep running in the background by minimizing it.
+
+Step 7: In Apache tomcat you can see web apps folder. Open the web apps folder and create a new folder name it as “myjsp”.
+
+Step 8: Open myjsp folder in vs code.
+
+Step 9: Create a new file give the file name as “myindex.jsp”.
+
+'''<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Google Maps Location (Safe)</title>
+        <style>
+            html,
+            body {
+                height: 100%;
+                margin: 0;
+            }
+
+            #map {
+                height: 70vh;
+                width: 100%;
+            }
+
+            .wrap {
+                max-width: 960px;
+                margin: 0 auto;
+                padding: 1rem;
+                font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            }
+
+            .card {
+                background: #fff;
+                border: 1px solid #e5e7eb;
+                border-radius: 12px;
+                padding: 1rem;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+            }
+
+            .error {
+                color: #b91c1c;
+                background: #fee2e2;
+                border: 1px solid #fecaca;
+                padding: .5rem .75rem;
+                border-radius: .5rem;
+            }
+
+            .muted {
+                color: #6b7280;
+                font-size: 0.9rem;
+            }
+        </style>
+        <% String latStr=request.getParameter("t1"); String lngStr=request.getParameter("t2"); Double lat=null; Double
+            lng=null; String error=null; try { if (latStr !=null && lngStr !=null && !latStr.trim().isEmpty() &&
+            !lngStr.trim().isEmpty()) { lat=Double.valueOf(latStr.trim().replace(',', '.' ));
+            lng=Double.valueOf(lngStr.trim().replace(',', '.' )); if (lat < -90 || lat> 90 || lng < -180 || lng> 180) {
+                throw new IllegalArgumentException("Coordinates out of range");
+                }
+                }
+                } catch (Exception ex) {
+                error = "Invalid coordinates: " + ex.getMessage();
+                }
+
+                double defLat = 28.6139; // Default latitude
+                double defLng = 77.2090; // Default longitude
+                %>
+
+    </head>
+
+    <body>
+        <div class="wrap">
+            <h1>Google Maps Location</h1>
+            <p class="muted">This page reads <code>t1</code> (latitude) and <code>t2</code> (longitude) from the query
+                string and centers the map.</p>
+
+            <% if (error !=null) { %>
+                <p class="error">
+                    <%= error %>. Showing default location instead.
+                </p>
+                <% } else if (lat==null || lng==null) { %>
+                    <p class="muted">Tip: open <code>myinput.jsp</code> and submit coordinates. Example: 28.6139,
+                        77.2090</p>
+                    <% } %>
+
+                        <div id="map" class="card"></div>
+
+                        <div class="card" style="margin-top:1rem;">
+                            <p><strong>Current center:</strong>
+                                Lat: <span id="latSpan"></span> ,
+                                Lng: <span id="lngSpan"></span>
+                            </p>
+                        </div>
+        </div>
+
+        <script>
+            // Values from server (fallback to defaults if missing)
+            const serverLat = <%= (lat != null ? lat : defLat) %>;
+            const serverLng = <%= (lng != null ? lng : defLng) %>;
+            const hasUserInput = <%= (lat != null && lng != null) ? "true" : "false" %>;
+
+            function initMap() {
+                const center = { lat: serverLat, lng: serverLng };
+                const map = new google.maps.Map(document.getElementById("map"), {
+                    center,
+                    zoom: hasUserInput ? 14 : 11,
+                });
+                new google.maps.Marker({ position: center, map });
+
+                // Show the numbers
+                document.getElementById("latSpan").textContent = center.lat.toFixed(6);
+                document.getElementById("lngSpan").textContent = center.lng.toFixed(6);
+
+                // Allow user to click to move marker and update display (no server roundtrip)
+                map.addListener("click", (e) => {
+                    const pos = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+                    map.setCenter(pos);
+                    marker.setPosition(pos);
+                    document.getElementById("latSpan").textContent = pos.lat.toFixed(6);
+                    document.getElementById("lngSpan").textContent = pos.lng.toFixed(6);
+                });
+                const marker = new google.maps.Marker({ position: center, map, draggable: true });
+                marker.addListener("dragend", () => {
+                    const p = marker.getPosition();
+                    const pos = { lat: p.lat(), lng: p.lng() };
+                    document.getElementById("latSpan").textContent = pos.lat.toFixed(6);
+                    document.getElementById("lngSpan").textContent = pos.lng.toFixed(6);
+                });
+            }
+        </script>
+
+        <!-- IMPORTANT: Replace YOUR_API_KEY with your real Google Maps API key.
+       Enable the Maps JavaScript API in Google Cloud. -->
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALU5Mx4kXMGv8U--GxWrHvQ4h1EHgpkwc&callback=initMap"></script>
+    </body>
+
+    </html>
+'''
+Step 10: Create a new file give the file name as “myinput.jsp”.
+
+'''<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Enter Latitude and Longitude</title>
+    </head>
+
+    <body>
+        <!-- Form to accept input values for latitude and longitude -->
+        <form action="myindex.jsp" method="get">
+            <pre>
+            Enter latitude: <input type="text" name="t1" />
+            Enter longitude: <input type="text" name="t2" />
+            <input type="submit" value="Show" />
+        </pre>
+        </form>
+    </body>
+
+    </html>
+'''
+
+Step 11: Open Google Cloud Platform Console, 
+Free Trial and Free Tier Services and Products | Google Cloud
+Click on Console
+
+Step-by-Step Guide to Implement Google Maps API with JSP
+1. Get Your Google Maps API Key
+•	First, you need to obtain an API key from Google Cloud Console to use the Google Maps JavaScript API. Follow these steps: 
+o	Go to Google Cloud Console.
+o	Create a new project (or select an existing one).
+o	Enable the Maps JavaScript API. (Instead of Places API and Geocoding API)
+o	Under Credentials, create an API Key and copy it.
+Demonstration: Here we have existing projects, now click on NEW PROJECT
+
+Project Name: GoogleMapsAPI and click CREATE
+
+-Now we can see our new project GoogleMapsAPI and Notifications of new project
+-Search, Click and Enable the Maps JavaScript API.
+-After Enabling Maps JavaScript API, it will show notifications and also redirect to billing method (Ignore billing method) 
+-Now click on Navigation Menu
+-APIs & Services > Credentials
+-Click + CREATE CREDENTIALS > API Key
+-We got the API Key Created, Copy the API Key and paste it in myindex.jsp file
+-Now, open myjsp folder and open with VS Code and paste the API_KEY in myindex.jsp script tag:
+Shown below:
+Before:<!-- Google Maps JavaScript API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY &callback=initMap" async defer></script>
+After: :<!-- Google Maps JavaScript API --><script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiofE1T6K975oNisc37nvURK7c87XR7e4 &callback=initMap" async defer></script>
+ 
+Step 5: Now to check the output, open a web browser Google Chrome or Microsoft Edge Ctrl + Click to follow the Link, URL: http://localhost:8080/myjsp/myinput.jsp
+Demonstration:
+
+Enter Example latitude and longitude of any place
+Here, latitude and longitude coordinates of city: Madurai 
+Latitude: 9.939093  
+Longitude:  78.121719
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#####Practical No. 05
+A: Installation and Configuration of virtualization using KVM.
+
+Software Tools Required
+●	Virtual Machine Monitor: VMware Workstation
+●	Operating System: Linux
+ 
+Downloads Required:
+●	Virtual Machine Monitor: Download VMware Workstation Pro 17.6.0 Build 24238078 for Windows | Uptodown.com
+●	Operating System: Download Ubuntu Desktop | Ubuntu (for Linux distribution of your choice)
+
+Open Vmware Workstation and start the steps
+Demonstration:
+-Create a New Virtual Machine >
+
+-Browse and place the ISO File
+Provide full name and user name as example and password and confirm password as linux
+
+-Give virtual machine name as KVM
+Provide disk size: 20 , Click on Customize Hardware
+
+-To enable KVM
+Check the Virtualize Intel VT if it is required
+
+-Ubuntu, a linux Distribution system will load.
+
+#Ubuntu Setup:
+1.Choose Language then click next
+2.Then in Accessibility Tab Click next
+3.Keyboard Layout As English US then next
+4.Connect to Internet then next
+5.Tick Install ubuntu then next
+6.Interactive then Default Installation
+7.Install Proprietary Software (tick both options)
+8.Then Tick Erase disk and install ubuntu
+9.Then Fill up the following details:
+
+We get the following screen  , Click Restart.
+Now login using your password.
+
+#II)	KVM Setup Steps: Open Terminal
+1.Update the System
+sudo apt update && sudo apt upgrade -y
+
+2.Check if Virtualization is Enabled:
+sudo grep -c "svm\|vmx" /proc/cpuinfo
+
+3.Verify KVM Virtualization
+Check if KVM virtualization is enabled by running command:
+kvm-ok
+If the kvm-ok command is not found, install the CPU checker tool: sudo apt install cpu-checker
+then type kvm-ok
+Output should include: 
+INFO: /dev/kvm exists
+KVM acceleration can be used.
+
+4.Install KVM and Required Packages
+   sudo apt install qemu-kvm virt-manager
+   libvirt-daemon-system 
+   libvirt-clients bridge-utils -y
+
+5.Enable the Virtualization Daemon Start and enable the libvirt daemon:
+sudo systemctl enable libvirtd 
+sudo systemct 
+start libvirtd
+
+6.Check the Status of the Libvirt Daemon
+Verify that the daemon is running:
+sudo systemctl status libvirtd
+
+7.Not Mandatory: If you want you can also add Your User to KVM and Libvirt Groups
+Replace your-username with your actual username and run the following commands:
+
+sudo usermod -aG kvm your-username 
+sudo usermod -aG libvirt your-username
+
+8.Log Out and Re-login
+Log out from your system and log back in to apply group changes.
+
+9.Run KVM Virtual Machine Manager
+Search for "Virtual Machine Manager" in your system applications and launch it.
+
+10.Prepare to Create Virtual Machines
+In Virtual Machine Manager, click Create a New Virtual Machine to begin setting up virtual environments.
+
+Now we can create new virtual machine from File>Create New Virtual Machine
+Then,-> Select the os to install (eg/:windows, ubuntu etc)
+->Then, set the memory and CPU settings.
+->Enable storage for virtual machine.
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#####Practical No.6
+Aim: Develop application to download image/video from server or upload image/video to server using MTOM techniques
+
+Software Tools Required:
+•	IDE or Code Editor: Netbeans version 8.0.2
+•	JDK: java jdk version 8
+•	Glassfish Server 4.1
+
+Project Name: ImageTransferApp
+Project Architecture:
+
+Step 1: Create a new Project.
+
+Step 2: Select Java Web >Web Application
+
+Step 3: Provide the project name as “ImageTransferApp” and Click Next.
+
+Step 4: Click Next
+
+Step 5: Click Finish
+
+Expand Project Architecture
+Step 6: Create 2 folder inside the Picture Folder. Folder name: download and upload. Also, download and add an image with name and jpg extension.
+Here image name and extension: book.jpg
+
+Step 7: Right Click on ImageTransferApp Project. New > Web Service
+
+Step 8: Name: ImageWS and Package: mypkg.ws and Finish
+
+Step 9: Enter the following code in ImageWS.java file
+Filename: ImageWS.java.
+
+'''/*
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package mypkg.ws;
+import java.io.*;
+import javax.jws.*;
+import javax.xml.ws.soap.MTOM;
+@MTOM(enabled = true, threshold = 60000)
+@WebService(serviceName = "ImageWS")
+public class ImageWS {
+    private static final String PATH = "C:/Users/bhoom/Pictures/upload/";
+    @WebMethod
+    public void upload(
+            @WebParam(name = "filename") String filename,
+            @WebParam(name = "imageBytes") byte[] imageBytes) {
+        try (FileOutputStream fos =
+                     new FileOutputStream(PATH + filename);
+             BufferedOutputStream bos =
+                     new BufferedOutputStream(fos)) {
+            bos.write(imageBytes);
+            bos.flush();
+            System.out.println("Uploaded: " + filename);
+            System.out.println("Bytes received: " + imageBytes.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @WebMethod
+    public byte[] download(
+            @WebParam(name = "filename") String filename) {
+        try {
+            File file = new File(PATH + filename);
+            byte[] bytes = new byte[(int) file.length()];
+            try (FileInputStream fis = new FileInputStream(file);
+                 BufferedInputStream bis =
+                         new BufferedInputStream(fis)) {
+
+                bis.read(bytes);
+            }
+            System.out.println("Downloaded: " + filename);
+            return bytes;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}'''
+
+Step 10: Clean and Build. Run Project. You will get following output.
+
+Step 11: Right Click on ImageTransferApp > New > Web Service Client. If not available click on Others.
+
+Step 12: Browse the project ImageTransferApp. Add package name “mypkg.clientt”. Click on Finish.
+
+Step 13: Check the projects. mypkg.client folder created automatically.
+
+Step 14: Right Click on Project > new > JSP
+
+Name: index and click Finish
+
+Step 15: Enter the following code inside index.jsp.
+Filename: index.jsp
+
+'''<%-- 
+    Document   : index
+    Created on : 10 Feb, 2026, 9:38:40 PM
+    Author     : bhoom
+--%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.io.*"%>
+<%@page import="javax.xml.ws.soap.MTOMFeature"%>
+<%@page import="mypkg.client.*"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SOAP Image Upload & Download</title>
+</head>
+<body>
+<h2>Upload Image</h2>
+<%
+ImageWS_Service service = new ImageWS_Service();
+ImageWS port = service.getImageWSPort(new MTOMFeature(60000));
+FileInputStream fis = null;
+try {
+    File file = new File("C:/Users/bhoom/Pictures/book.jpg");
+    byte[] data = new byte[(int) file.length()];
+    fis = new FileInputStream(file);
+    fis.read(data);
+    port.upload(file.getName(), data);
+    out.println("Uploaded: " + file.getName());
+} catch (Exception e) {
+    e.printStackTrace();
+} finally {
+    if (fis != null) fis.close();
+}
+%>
+<hr/>
+<h2>Download Image</h2>
+<%
+FileOutputStream fos = null;
+try {
+    ImageWS_Service service2 = new ImageWS_Service();
+    ImageWS port2 =
+            service2.getImageWSPort(new MTOMFeature(60000));
+    String filename = "book.jpg";
+    byte[] data = port2.download(filename);
+    fos = new FileOutputStream(
+            "C:/Users/bhoom/Pictures/download/" + filename);
+    fos.write(data);
+    out.println("Downloaded: " + filename);
+} catch (Exception e) {
+    e.printStackTrace();
+} finally {
+    if (fos != null) fos.close();
+}
+%>
+</body>
+</html> '''
+
+Step 16: Save the file. Right click on project. Click on Clean and Build. 
+
+Step 17: Right click on Project. Click on deploy.
+
+Step 18: Run the index.jsp file. You will get the following output in browser.
+
+Step 19: Check the upload and download folder you will get the image inside the folders.
+
+-----------------------------------------------------------------------------------------------------------------------------------
+Practical No 07
+Aim: Implement Platform as a Service (PaaS) by installing and running a Flask web application inside a Lubuntu virtual machine using VirtualBox, with a Python virtual environment and host-based access via the VM’s IP address.
+
+Step 1: Download lubuntu ISO file
+
+Step 2: Set Up Virtual Machine
+Create a New VM
+•	Open VirtualBox → Click New.
+•	Name: Lubuntu
+•	Type: Linux
+•	Version: Ubuntu (64 bit)
+Allocate Resources
+•	Memory: At least 2 GB RAM (more if possible).
+•	Disk: Create a virtual hard disk (20 GB recommended).
+Mount ISO
+•	Go to Settings → Storage.
+•	Under “Controller: IDE,” click the empty disk icon → Choose a disk file → Select the Lubuntu ISO you downloaded.
+
+Step 3: Boot Lubuntu in VM
+•	Start the VM.
+•	The Lubuntu boot menu will appear.
+•	Select “Try Lubuntu” (instead of Install).
+This will launch a live session of Lubuntu directly from the ISO, allowing you to test the OS without installing it.
+
+Step 4: After open Lubuntu the open Terminal and type command to Update Package Lists
+	sudo apt-get update 
+
+Step 5: Create and Enter a New Folder
+	sudo mkdir folder_name(like : WS&CC)
+	cd folder_name
+
+Step 6: Install Python Virtual Environment Tools
+	sudo apt install python3-venv -y
+
+Step 7: Create a Virtual Environment and Activate the Virtual Environment
+	python3 -m venv myenv
+	source myenv/bin/activate
+
+Step 8: Install Flask
+	pip install flask
+
+Step 9: Create a Flask File
+Inside your folder (WS&CC), create a new file called app.py:
+	sudo nano app.py
+Paste the following code:
+from flask import Flask
+app = Flask(__name__)
+@app.route("/")
+def home():
+    return "Hello, Flask is working!"
+@app.route("/about")
+def about():
+    return "This is About Page!"
+if __name__ == "__main__":
+    app.run(debug=True)
+
+Save and exit Nano: Press Ctrl + O → Enter → Ctrl + X.
+
+Step 10: Run the Flask App
+Make sure your virtual environment is active (source myenv/bin/activate), then run:
+	python3 app.py
+You’ll see output like:
+* Running on http://127.0.0.1:5000/ 
+* Running on http://182.168.62.154:5000/ 
+
+Step 11: To test we have to check our Lubuntu IP address, just type ifconfig and copy the IP address and paste to Main machine browser.
+
+----------------------------------------------------------------------------------------------------------------------------------------------\
+
+Practical 8
+Aim: SaaS using Apache.
+
+Step 1: Download practical 8 zip file. Extract zip file. Rename the file name as PRAC8.
+
+Step2: Copy extracted zip file and paste in C driver -> XAMPP -> htdocs
+
+Step 3: In XAMPP server, start Apache.
+
+Step 4: Search ethernet setting. Copy the IPv4 address.
+
+Step 5: Paste the IP4 address. 
+
+Step 6:  In browser URL, instead of dashboard type PRAC8. You will get the following page.
+
+Step 7: Click on tinyfilemanager.php.
+
+Step 8: Enter the username is “admin” and password is “admin@123”. You will get the following page.
+
+Step 9: Click on new Item. Create new folder named as “upload”.
+
+Step 10: In newly created upload folder, add any file using upload option from right corner.
+
+Step 11: After uploading any file you will get that file in list. 
+
+Step 12: If you want to share the file within network to another person then only just type the uploader IP address/foldername. Example: http://192.168.6.192/upload
+
+------------------------------------------------------------------------------------------------------------------------------------
+Practical No: 9
+Aim: To connect a Java application with Amazon Simple Workflow Service (SWF) using AWS SDK and retrieve registered workflow domains.
+
+Step 1: AWS Console Login
+1.	Open browser
+2.	Go to: https://aws.amazon.com/console/
+3.	Login using Root user 
+4.	After login then search IAM
+ 
+Step 2: Create IAM User
+1.	Go to IAM
+2.	Click Users
+3.	Click Create User
+4.	Enter user name: aws-java-user
+5.	Click Next
+ 
+Step 3: Set Permissions
+1.	Select Attach policies directly
+2.	Search: AdministratorAccess
+3.	Select the policy
+4.	Click Next
+ 
+Step 4: Review and Create User
+1.	Review details
+2.	Click Create User
+ 
+Step 5: User Created Successfully
+After creation:
+1.	Click on created user
+2.	Go to Security Credentials
+ 
+
+Step 6: Create Access Key
+1.	Scroll to Access Keys
+2.	Click Create Access Key
+ 
+Step 7: Select Use Case
+1.	Select: Command Line Interface (CLI)
+2.	Click Next
+ 
+
+Step 8: Create Access Key
+1.	Click Create Access Key
+2.	Copy Access Key and Copy Secret Access Key OR Click Download .csv file
+ 
+Step 9: Then Download AWSCLI.msi Which is located on WSCC folder
+Step 10 : Configure AWS CLI
+Open Command Prompt and type: aws configure
+Enter:
+•	Access Key
+•	Secret Key
+•	Region: ap-south-1
+•	Output format: json
+ 
+Step 11: NetBeans Project Creation Steps
+1.	Open Apache NetBeans IDE
+2.	Click on File → New Project
+3.	Select Maven → Java Application
+4.	Enter Project Name as AWSWorkFlow
+5.	Click Finish
+ 
+Step 12: Go to Project Files -> pom.xml Configuration
+Open pom.xml and add the following dependencies:
+if any other version is written, replace it with:
+<properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+</properties>
+Add Dependencies Inside the project:
+<dependencies>
+    <dependency>
+        <groupId>software.amazon.awssdk</groupId>
+        <artifactId>swf</artifactId>
+        <version>2.25.28</version>
+    </dependency>
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>2.0.9</version>
+    </dependency>
+</dependencies>
+OR
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.mycompany</groupId>
+    <artifactId>AWSWorkFlow</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>swf</artifactId>
+            <version>2.25.28</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.9</version>
+        </dependency>
+    </dependencies>
+</project>
+Step 13: Create Class, Right Click on AWSWorkFlow project -> New -> Java Class and give the file name AWSConnect  and Click finish
+Java Implementation Code:
+import software.amazon.awssdk.services.swf.SwfClient;
+import software.amazon.awssdk.services.swf.model.ListDomainsRequest;
+import software.amazon.awssdk.services.swf.model.ListDomainsResponse;
+import software.amazon.awssdk.regions.Region;
+public class AWSConnect {
+    public static void main(String[] args) {
+        SwfClient swf = SwfClient.builder()
+                .region(Region.AP_SOUTH_1)
+                .build();
+        System.out.println("Connected to AWS SWF!");
+        ListDomainsRequest request = ListDomainsRequest.builder()
+                .registrationStatus("REGISTERED")
+                .build();
+        ListDomainsResponse response = swf.listDomains(request);
+        System.out.println(response);
+    }
+}
+
+Step 14: Running the Project
+Right click on the project in NetBeans and click on Build and Click.
+After Success of Build and Click then Right click on the project in NetBeans and click Run.
+The application will connect to AWS SWF and display the registered domains.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+
+
+
+
+
+
