@@ -1,0 +1,406 @@
+Practical No: 01
+Aim: Creating a Forensic Image using FTK Image/Encase Imager
+
+Step 1: Open AccessData FTK Imager application 
+ 
+Step 2: Click File and Create Disk Image 
+
+Step 3: Select Logical Dive and then click next
+ 
+Step 4: In the Source Dive select your connected External Device (eg. Pen drive) and then click finish 
+ 
+Step 5: Click on add button and then select Raw (dd) and click next
+ 
+Step 6: Write all the required details for the Evidence Information and then click next
+ 
+Step 7: Create new folder and add its destination path in the Image destination folder also give filename in the next column  and then click finish 
+
+Step 8: This window will occure and your image creation process will be started 
+ 
+Step 9: After creation done click close 
+ 
+Step 10:  Then it will generate summary
+ 
+Step 11: Open you’re newly created Folder and check whether the image is created.
+ 
+Step 12: Create disk image and select image file and then click next
+ 
+Step 13: Select previously created image and add its path click finish 
+
+Step 14: Click add and select the folder path and click start
+ 
+Step 15: Write all the required details and click next
+ 
+Step 16: Browse and select the folder path name it and click start
+ 
+Step 17 : now select the evidence tree and analyze the image file.
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+Practical No. 02
+Aim: Data Acquisition
+Perform data acquisition using:
+-	USB Write Blocker + Encase Imager
+-	SATA Write Blocker + Encase Imager
+-	Falcon Imaging Devices
+
+Step 1: Open Registry
+ 
+Step 2: This will open the Registry Editor. Navigate to following key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control
+ 
+Step 3: Right Click on the Control key in the left panel. Select, select new > Key
+ 
+Step 4: Name it as StorageDevicePolicy
+  
+Step 5: Right click on StorageDevicePolicy in left panel select new < DWORD value and name it as WriteProtect
+ 
+Step 6: Double Click on WriteProtect and then change the value data from 0 to 1
+ 
+Step 7: The new setting takes effect immediately. Every user who tries to copy/ move data to USB devices or format USB drive will get the error message
+ 
+Step 8: We can only open the file in the USB drive for reading but it’s not allowed to modify and save the changes back to USB drive.
+ 
+Creating a USB Write Blocker Forensic Image using EnCase Imager.
+I.  Creating a forensic image
+II.Check integrity of data
+III.Analyze forensic image
+I. Creating a USB Forensic Image
+
+Step 01: Launch EnCase and Create a New Case.
+·	Open EnCase Forensic.
+·	Click File > New.
+·	Enter Case Information (Name, Number, Examiner) and click Finish.
+
+Step 02: Add the Source Drive.
+·	In the Left "Tree" Pane, right-click on Entries.
+·	Select Add Device.
+·	Locate and select the checkbox for your suspect drive (connected via a write-blocker).
+·	Click OK. The drive will appear in the Tree Pane.
+
+Step 03: Start the Acquisition.
+·	Right-click on the suspect drive in the Tree Pane.
+·	Select Acquire... from the menu.
+
+Step 04: Configure Image Settings.
+·	Destination: Browse to your destination folder.
+·	File Name: Enter a name for the image file (e.g., MyEvidence).
+·	Format: Select Expert Witness Format (Ex01).
+·	Segment Size: Set a size (e.g., 2 GB).
+·	Compression: Select Fast.
+·	Checksum: Ensure MD5 and SHA-1 are selected.
+·	Click Start.
+
+Step 05: Imaging Process.
+·	EnCase will begin acquiring the image.
+·	A progress window will show the status, time elapsed, and the calculated hash values.
+
+Step 06: Completion.
+·	When complete, a message will show "Acquire is complete."
+·	The MD5 and SHA-1 hashes are displayed and automatically verified against the source.
+
+II. Check Integrity of Data
+·	The integrity check is automatic in EnCase.
+·	After acquisition, EnCase compares the hash (MD5/SHA-1) of the source device with the hash of the created image file.
+·	A confirmation message verifies the hashes match, proving the image is a perfect, forensically sound copy.
+
+III. Analyze USB Forensic Image
+Step 01: Add the Image to a Case.
+·	Go to File > Add Evidence Item....
+·	Select Image File and click Next.
+·	Browse to and select your .Ex01 image file. – Click finish.
+
+Step 02: Explore the Evidence.
+·	The image file is now loaded in the Tree Pane.
+·	You can browse the file system, view files, recover deleted data, and analyze the evidence.
+Done!
+----------------------------------------------------------------------------------------------------------------------------------
+
+Practical No.03
+Aim : Anaylze the memory dump of a running computer system. 
+Extract volatile data such as
+-	Open Processes
+-	Network connections 
+-	Registry information
+
+Step1: Go to CF software folder and open Sysinternal folder
+
+Step 2: Select Procmon application and run as administrator
+ 
+Step 3 : Now open Tcpview application
+
+Step 4: Search regdit in search bar and Open Registry Editor .
+
+Step 5 : Exlpore all  HKEY trees.
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+Practical 04
+Aim: Capturing and analyzing network packets using WireShark (Fundamentals):
+i) Identification the live network
+ii) Capture Packets
+iii) Analyze the captured packets
+iv) Display filter command
+
+1. Display packets based on specific IP-address
+Filter: ip.addr == 192.0.2.1
+ 
+2. Display packets which are coming from specific IP-address
+Filter: ip.src == 192.168.10.28
+ 
+3. Display packets which are having specific IP-address destination
+Filter: ip.dst == 192.168.10.28
+
+ 
+4. Display packets which are using http protocol
+Filter: http 
+ 
+5. Display packets which are using http request
+Filter: http.request
+ 
+6. Display packets which are using TCP protocol
+Filter: tcp 
+ 
+7. Display packets having no error connecting to server
+Filter: http.response.code==200
+ 
+8. Display packets having port number 80, 443
+Filter: tcp.port==80 || udp.port==443
+ 
+9. Display packets which that contains keyword facebook
+Filter: tcp contains facebook
+ 
+###Case study
+Q)Analyze the packets provided in lab and solve the question using wireshark
+1. What web server software issued bygo.microsoft.com? What web server software issued by www.snopes.com
+Analysis- The domain name be found from host header so we will set host header so we will set host header column where we will see all domain name. 
+
+Step 1: Select any HTTP request and expand the hypertext Tranfer Protocol Right click on host and select apply as column. 
+
+Step 2: Then it will create column for host and it will show www.snopes.com in that column . right click on it follow > TCP Stream.
+
+2. About what cell phone problem is the client concerned?
+Analysis – Client talking about cell so we search for cell keyword in whole packets. We will use regular express for searching the cell keyword. Apply frame matches “(?)cell”.
+In the search frame type frame matches “microsoft”
+Step 1: Type filter  frame matches "(?) cell”
+ 
+3. a) According to http, what data will TCP show?
+Analysis - As we did in the last challenge, we will apply a regular express filter for the Google keyword. Apply frame matched “http”.
+Filter: frame matches “(?) http”
+ 
+b) According to Zillow, what instrument willryan learn to play?
+Filter: frame matches"(?)zillow"
+Analysis - 
+Step 1: Type the following filter, then it will show only one packet select it and expand the TCP > right click on it. Protocol preferences > tick “allow subdissector to reassemble TCP streams.
+ 
+Step 2: Then again right click on TCP > Export objects > HTTP and save it new folder.
+ 
+4. How may web servers are running Microsoft/Apache?
+Step 1: filter http.response
+ 
+Step 2: Same right click http apply as column, it will show which ever is running Microsoft / apache and all. Then type filter http.server contains "Microsoft".
+ 
+Step 3: Right click on any http > Endpoint
+ 
+Step 4: Select ipv4.
+ 
+5. What hosts (IP addresses) think that jokes are more entertaining when they are explained?
+Apply filter frame matches "(?)jokes".
+Analysis - 
+Step 1: filter > frame matches "(?)jokes”.then check the column of server , it will show the output as “jokes are better explained”.
+---------------------------------------------------------------------------------------------------------------------------------------------
+Practical No.05
+Aim : 
+Using Sysinternal tools for Network Tracking and Process Monitorng :
+->Check Sysinternals tools
+Step 1: Google -> sysinternal tools
+If Available then skip the installation part. Let’s Install the sysinternal suite for Windows. Then en link https://learn.microsoft.co/en-us/sysinternals/downloads/sysinternals-suite
+->Monitor live processes
+Step 2: Open Procmon to monitor the live processes from Sysinternal folder.
+ 
+->Capture RAM. 
+Step 3: Sysinternal -> RAMMap
+ 
+->Capture TCP/UDP packets
+Step 4:Sysinternal -> TCPView. And capture the TCP/UDP packets.
+ 
+->Monitor Hard Disk
+Step 4: Sysinternal ->  DiskMon for displaying hard disk activity
+  
+->Monitor virtual memory
+Step 5: Sysinternal ->  VMMap. It used for processing virtual and physical memory analysis.
+ 
+->Monitor Cache Memory
+Step 6: Sysinternal -> CasheSet  .
+ 
+-------------------------------------------------------------------------------------------------------------------------------------------------         s
+PRACTICAL NO: 06 
+Aim: Recovering and Inspecting Deleted files 
+→ check for deleted files  
+→ recover the deleted files  
+→ analyze and inspect the recovered files 
+→ perform this using recovery option in encase and also perform manually through command line 
+
+Step 1: Install autopsy. Go to CF folder à go to CF_SOFTWARES_EXAM folder à then click on autopsy named file and double click on it to install. 
+
+Step 2: After installing open Autospy and click on New case. 
+ 
+Step 3: Give the information required in the Case Information and Optional Information. Make sure to make a new folder to save all the files at one place. Click on Finish. 
+
+Step 4: As the Add Data Source window opens.. select Disk Image or VM File, click on Next à it ask to browse file (make sure to have  img file of a hardware device, eg: pendrive) as we select the img file & click on next andclick on finish. 
+
+Step 5: It will take u to main autopsy page.  
+
+Step 6: We will see the disk we have selected and files in it.. Or the files which were there before, and as we extend the tree we can see many files in it. 
+
+Step 7: Click on Deleted Files and we will see many files which were therein the pendrive. And then right click on any file and u can extract the wanted file after choosing the location u want the extracted file to be saved. 
+
+Step 8: You can see the extracted file in the location and you can vew it. After that we can generate Report of our Case. By, Going on tools and click on Generate Report, then we can select in which form we want our report in. Here, I have selected in Excel format. 
+ 
+Step 9: We can see the excel report in which we can see the summary of our case and in the bottom of the excel we can see many sheets of different names telling us the information about our case. 
+
+Step 10: Using CMD, Open cmd as adminsistartor and Run chkdsk D: /f (replace D: with the target drive) to fix errors and potentially reveal lost files. 
+
+Step 11: To list hidden/deleted entries: dir /a D:\ (shows all files, including system/hidden ones that might indicate deletions). 
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+Practical 07
+Aim: Steganography Detection
+
+Step 1: Installation 
+ 
+Step 2: Click on I Agree and next 
+
+Step 3: Click on close 
+
+Step 4: After download put password (eg:1234) and add image that has created .txt and click go 
+  
+Step 5: After that add image and add file => click on stegged image 
+  
+Step 6: then one more image is created name that image house   
+  
+Step 7:  Create a text file save it in the same Folder
+ 
+Step 8:
+1.Now create WinRAR file shortcut on Desktop now we are going to do the stegging process using cmd and view using the image file WinRAR 
+2.Open cmd and navigate to the folder 3. Type the following commands 
+  
+Step 9: Then world zip file is created  
+  
+Step 10: Then it will show txt file with jpg image 
+
+This will show the documents that you have created with text. 
+ 
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+PRACTICAL 8
+AIM: Acquisition of Cell phones and Mobile devices.   
+
+Step 1: Download required files 
+(a) MOBILedit! Forensic 10.1.0.25985 Software (Desktop/Laptop)
+(b) Forensic Tool apk (Android)
+
+Step 2: Open MOBILEdit Forensic  (Should be Activated/Cracked)
+
+Step 3: Connect your Device by clicking on “Connection Wizard”.
+CLICK ON “Android” and Click on Next [Ignore Open File | SIM Card Reader]
+
+Step 4: Click on “Cable” and Next
+
+Step 5: Follow Instructions and Enable Developer Mode in your Phone. 
+After Developer Mode Enabled 🡺 Enable USB Debugging (developeroptions)
+  
+Step 6: Make sure USB Debugging is enabled and you choose to connect with your desktop when confirmation prompts at your phone screen (Tick if required)
+- Click on USB Tethering (when connected with PC/Laptop) 
+It means you’re connected now!
+
+Step 7: Click on Three Lines -> View ->  Tree View 
+
+Step 8: Click on Device to know more info 🡺 Report Wizard and follow instructions
+(Check your information, select Device Capabilities and select path for logfile 🡪 BROWSE)Select Whole file system or Specified File types only 
+(YOU WILL REQUIRE BACKUP REQUEST APPROVAL WITH YOUR PHONE PASSWORD)  
+Type password to proceed and click Backup my data
+Acquiring of selected data may take a while.
+  
+You can check log file later wherever the path was selected after wizard process finished.
+ 
+Step 9: Click on Cases and click on your device to download/backup available data
+
+Step 10: Click on “Cases” (Left panel) and select your device to Check your reports or Open Data Folder | Done!
+(It’s encrypted Backup Data)
+ 
+--------------------------------------------------------------------------------------------------------------------------------------------
+Practical No. 09
+Aim: Email Forensic
+
+Step 1: Select the new Case to create the new case.
+ 
+Step 2: Provide the Investigator’s name fill the other case information like case numbers, name, path, description. And click on next.
+ 
+Step 3: Fill the Forensic Examiner Information like agency/company’s name, examiner name, address, email etc. And click on next
+
+Step 4:  Next Case log Option, select all events or checkbox and click on next.
+ 
+Step 5: In Refine Case -Default, select Email Emphasis as it is email forensic.In conditionally add, File status criteria select Deletion status:either, encryption status:either, email status:from email. And in file type Criteria select all checkboxes except for excecutables and folders. Click the next button.
+ 
+Step 6: Same for Refine Index -Default and click on next button.
+ 
+Step 7: Next add the evidence, select type of evidence that is Individual File. And continue.
+
+Step 8: Now select the email file to Add to case. Click on Open
+
+Step 9: Next fill the Evidence Information like location, display name and click on ok.
+ 
+Step 10: The Evidence of email file is now added to the case. 
+ 
+Step 11: Select the path for new case and click on finish to complete the setup of new case. 
+
+Step 12: After completing the case setup, the forensic tool opens the case dashboard displaying the added email evidence file.
+
+Step 13: Select the added email evidence from the evidence panel to begin email forensic analysis.
+
+Step 14:The tool starts processing and indexing the email file to extract metadata and message contents.
+
+Step 15: Once processing is completed, view the list of emails extracted from the evidence file.
+
+Step 16: Select an individual email from the list to analyze its detailed information.
+
+Step 17: View the email header details including sender address, receiver address, subject, date, and time.
+ 
+Step 18: Select Export file to export the detailed information about that email file.
+ 
+Step 19: Choose export settings, select highlighted files, browse destination path, and click on.
+ 
+Step 20: Now it will saved exported file of email file at the provided destination path.
+ 
+Step 21: The exported report is generated successfully and contains complete forensic details including email headers, deleted messages, timeline, and case information.
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+Practical No. 10:
+Aim: Web Browser Forensics
+1.	Analyze browser artifacts, including history file, bookmarks, and download records.
+
+2.	Analyze cache and cookies data to reconstruct user-browsing history and identify visited websites or online activities.
+
+3.	Extract the relevant log or timestamp file, Analyze its contents and interpret the timestamp data to determine the user’s last internet activity.
+
+Step 1: First install “BrowserHistoryExaminer_v1.9.0_” from CF_SOFTWARES_EXAM folder. After installing the application open it as administrator. Click on “Continue Trial”.
+
+Step 2: As the interface opens click on file and then “Capture History”  select the 1st option and next  give the destination for the file to be saved and then click on capture.
+
+Step 3: As the dialogue box of Captur complete comes click on “Yes” You will able to see the extracted files.
+
+Step 4: Go on File  Report  Save as PDF
+
+Step 5: We will see there are no reports saved so now we will select any tab  Report  Add records to report 
+
+Step 6: Go on File  Report  Save as PDF, you will see the records in the PDF.
+
+
+
+ 
+
+
+
+
+
